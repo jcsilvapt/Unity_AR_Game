@@ -32,7 +32,8 @@ public class GM : MonoBehaviour {
     }
 
     private void OnCameraFrameRecieved(ARCameraFrameEventArgs eventArgs) {
-        UpdateCameraImage();
+        if(isRunning)
+            UpdateCameraImage();
     }
 
     unsafe void UpdateCameraImage() {
@@ -57,30 +58,21 @@ public class GM : MonoBehaviour {
         }
 
         m_CameraTexture.Apply();
-        m_RawCameraImage.texture = m_CameraTexture;
-        if(isRunning) {
-            GetPixels(m_CameraTexture);
-        }
+        m_RawCameraImage.texture = m_CameraTexture;        
     }
 
-    private void GetPixels(Texture2D texture2d) {
+    public bool GetColorMatch(Color generatedColor) {
+        if(isRunning) {
+            Color cameraColor = ImageProcessing.ProcessImage(m_CameraTexture);
 
-        Color[] data = texture2d.GetPixels(texture2d.width / 2, texture2d.height /2, 100, 100);
+            imageInfo.text = cameraColor.ToString();
 
-        lenghtText.text = data.Length.ToString();
-
-        float r = 0f, g = 0f, b = 0f;
-
-        foreach(Color c in data) {
-            r += c.r;
-            g += c.g;
-            b += c.b;
+            // Check the distance using Hamming Distance (Better performance)
+            if(ImageProcessing.CompareColors(generatedColor, cameraColor, CalculationMethod.HAMMINGDISTANCE)) {
+                return true;
+            }
         }
-
-        Color middlePixel = new Color((r / data.Length), (g / data.Length), (b / data.Length));
-
-        imageInfo.text = middlePixel.ToString();
-
+        return false;
     }
 
 

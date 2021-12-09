@@ -21,7 +21,7 @@ public class ImageProcessing {
             b += c.b;
         }
 
-        // Reset the R,G,B to the average of the color
+        // Set the R,G,B to the average value of the color
         r = r / data.Length;
         g = g / data.Length;
         b = g / data.Length;
