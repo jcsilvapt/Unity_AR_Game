@@ -6,15 +6,18 @@ using UnityEngine.XR.ARSubsystems;
 
 public class GM : MonoBehaviour {
 
-    public ARCameraManager m_CameraManager;
-    public AROcclusionManager m_OcclusionManager;
+    [Header("References")]
+    [SerializeField] ARCameraManager m_CameraManager;
+    [SerializeField] AROcclusionManager m_OcclusionManager;
 
-    public RawImage m_RawCameraImage;
+    [Header("UI")]
+    [SerializeField] RawImage m_RawCameraImage;
+    [SerializeField] Text imageInfo;
+    [SerializeField] Text lenghtText;
 
-    public Text imageInfo;
-    public Text lenghtText;
-
-    Texture2D m_CameraTexture;
+    [Header("Developer")]
+    [SerializeField] Texture2D m_CameraTexture;
+    [SerializeField] bool isRunning = false;
 
     private void OnEnable() {
         if (m_CameraManager != null) {
@@ -38,9 +41,6 @@ public class GM : MonoBehaviour {
             return;
         }
 
-        /*imageInfo.text = string.Format("Image info:\n\twidth: {0}\n\theight: {1}\n\tplaneCount: {2}\n\ttimestamp: {3}\n\tformat: {4}",
-                image.width, image.height, image.planeCount, image.timestamp, image.format);*/
-
         var format = TextureFormat.RGBA32;
 
         if(m_CameraTexture == null || m_CameraTexture.width != image.width || m_CameraTexture.height != image.height) {
@@ -58,7 +58,9 @@ public class GM : MonoBehaviour {
 
         m_CameraTexture.Apply();
         m_RawCameraImage.texture = m_CameraTexture;
-        GetPixels(m_CameraTexture);
+        if(isRunning) {
+            GetPixels(m_CameraTexture);
+        }
     }
 
     private void GetPixels(Texture2D texture2d) {
