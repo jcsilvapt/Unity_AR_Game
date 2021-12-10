@@ -75,23 +75,24 @@ public class CharacterAnimation : MonoBehaviour {
 
     private void ChangeText() {
         textToShowIndex++;
-        if(textToShowIndex == subtitles.Count) {
+        if (textToShowIndex == subtitles.Count) {
             StartCoroutine(ResizeCharacter());
         }
         Debug.Log("subtitle Changed");
-        UIController.SetSubtitleText(subtitles[textToShowIndex]);
+        UIController.SetSubtitleText(subtitles[textToShowIndex - 1]);
+
     }
 
     // Animation Event
     private void CallSubtitles() {
-        if(!GameController.IsGameRunning()) {
+        if (!GameController.IsGameRunning()) {
             UIController.ShowSubtitlePanel();
             isAnimationPlaying = true;
         }
     }
 
     public void CubeFound() {
-        if(!GameController.IsGameRunning()) {
+        if (!GameController.IsGameRunning()) {
             StartCoroutine(StartGame());
         }
     }
@@ -101,9 +102,11 @@ public class CharacterAnimation : MonoBehaviour {
     private IEnumerator StartGame() {
         UIController.SetSubtitleText("ISSO ENCONTRAS-TE");
         yield return new WaitForSeconds(4f);
-        UIController.SetSubtitleText("Vamos começar a jogar, encontra a cor que te vou mostrar...");
+        UIController.SetSubtitleText("Vamos começar a jogar!");
         yield return new WaitForSeconds(4f);
-        UIController.SetSubtitleText("Quando a encontrares o cubo vai ser pintado com essa cor!");
+        UIController.SetSubtitleText("Encontra a cor que te vou mostrar...");
+        yield return new WaitForSeconds(4f);
+        UIController.SetSubtitleText("Quando a encontrares, o cubo vai ser pintado com essa cor!");
         yield return new WaitForSeconds(4f);
         UIController.SetSubtitleText("Tenta encontrar o máximo de cores antes do tempo acabar!!");
         yield return new WaitForSeconds(4f);

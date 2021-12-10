@@ -46,7 +46,7 @@ public class CubeRotation : MonoBehaviour {
         if (isActive) {
             xRotation();
             yRotation();
-            zRotation();
+            //zRotation();
         }
     }
 

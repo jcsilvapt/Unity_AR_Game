@@ -1034,7 +1034,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '{ Pixels Lenght }'
+  m_Text: '{ Pixels Length }'
 --- !u!1 &694101754
 GameObject:
   m_ObjectHideFlags: 0
@@ -1203,7 +1203,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 350, y: 34}
+  m_SizeDelta: {x: 350, y: 167.4}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &704758195
 CanvasRenderer:
@@ -1239,12 +1239,12 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 28
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: '{ subtitles }'
 --- !u!1 &705507993
