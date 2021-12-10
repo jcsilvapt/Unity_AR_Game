@@ -19,6 +19,7 @@ public class CharacterAnimation : MonoBehaviour {
     [SerializeField] float timePerText = 3f;
     [SerializeField] float elapsedTime = 0f;
     [SerializeField] bool finishWaving = false;
+    [SerializeField] bool allowResize = true;
 
     private void Start() {
 
@@ -100,11 +101,11 @@ public class CharacterAnimation : MonoBehaviour {
     private IEnumerator StartGame() {
         UIController.SetSubtitleText("ISSO ENCONTRAS-TE");
         yield return new WaitForSeconds(4f);
-        UIController.SetSubtitleText("Vamos come�ar a jogar, encontra a cor que te vou mostrar...");
+        UIController.SetSubtitleText("Vamos começar a jogar, encontra a cor que te vou mostrar...");
         yield return new WaitForSeconds(4f);
         UIController.SetSubtitleText("Quando a encontrares o cubo vai ser pintado com essa cor!");
         yield return new WaitForSeconds(4f);
-        UIController.SetSubtitleText("Tenta encontrar o m�ximo de cores antes do tempo acabar!!");
+        UIController.SetSubtitleText("Tenta encontrar o máximo de cores antes do tempo acabar!!");
         yield return new WaitForSeconds(4f);
         UIController.SetSubtitleText("Boa Sorte!!!");
         yield return new WaitForSeconds(4f);
@@ -112,28 +113,30 @@ public class CharacterAnimation : MonoBehaviour {
     }
 
     private IEnumerator ResizeCharacter() {
-        bool isResizing = true;
-        int freeCounter = 0;
-        while (isResizing) {
-            Vector3 currentSize = transform.localScale;
-            Vector3 objectiveSize = new Vector3(0.05f, 0.05f, 0.05f);
-            Vector3 currentPosition = transform.localPosition;
-            Vector3 objectivePosition = new Vector3(-0.09f, -0.15f, 0.4f);
+        if (allowResize) {
+            bool isResizing = true;
+            int freeCounter = 0;
+            while (isResizing) {
+                Vector3 currentSize = transform.localScale;
+                Vector3 objectiveSize = new Vector3(0.05f, 0.05f, 0.05f);
+                Vector3 currentPosition = transform.localPosition;
+                Vector3 objectivePosition = new Vector3(-0.09f, -0.15f, 0.4f);
 
 
-            Vector3 size = Vector3.Lerp(currentSize, objectiveSize, Time.deltaTime);
-            Vector3 position = Vector3.Lerp(currentPosition, objectivePosition, Time.deltaTime);
-            transform.localScale = size;
-            transform.position = position;
-            freeCounter++;
+                Vector3 size = Vector3.Lerp(currentSize, objectiveSize, Time.deltaTime);
+                Vector3 position = Vector3.Lerp(currentPosition, objectivePosition, Time.deltaTime);
+                transform.localScale = size;
+                transform.localPosition = position;
+                freeCounter++;
 
-            if ((transform.localScale.x >= 0.05f && transform.localScale.x <= 0.0505) && (transform.localPosition.x >= -0.09f && transform.localPosition.x <= -0.0899)) {
-                isResizing = false;
-                UIController.SetDebugText("Coroutine Completed");
-                Debug.Log("Coroutine Completed");
+                if ((transform.localScale.x >= 0.05f && transform.localScale.x <= 0.0505) && (transform.localPosition.x >= -0.09f && transform.localPosition.x <= -0.0899)) {
+                    isResizing = false;
+
+                }
+                yield return null;
             }
-            yield return null;
         }
+        yield return null;
     }
 
     #endregion

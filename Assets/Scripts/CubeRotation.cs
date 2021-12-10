@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class CubeRotation : MonoBehaviour {
 
@@ -9,21 +10,20 @@ public class CubeRotation : MonoBehaviour {
     [SerializeField] float rotationSpeed = 100f;
 
     [Header("Face Materials")]
-    [SerializeField] List<Material> cubeMaterials = new List<Material>();
+    [SerializeField] List<GameObject> originalCubeFaces = new List<GameObject>();
 
     [Header("Developer Settings")]
-    [SerializeField] List<Material> cubeMaterialsOriginal = new List<Material>();
-    [SerializeField] List<bool> cubeColorChanged = new List<bool>();
-    [SerializeField] bool isCubePainted = false;
+    [SerializeField] List<Color> originalCubeColors = new List<Color>();
 
     [SerializeField] bool isActive = false;
+    [SerializeField] int indexPainted = 0;
 
     private void Start() {
 
-        foreach (Material m in cubeMaterials) {
-            Material matCopy = new Material(m);
-            cubeMaterialsOriginal.Add(matCopy);
-            cubeColorChanged.Add(false);
+        // Copiar as faces do cubo e recolher cores iniciais
+        foreach (GameObject o in originalCubeFaces) {
+            Color colorObject = o.GetComponent<Renderer>().material.GetColor("_Color");
+            originalCubeColors.Add(colorObject);
         }
 
         FindObjectOfType<CharacterAnimation>().CubeFound();
@@ -31,16 +31,21 @@ public class CubeRotation : MonoBehaviour {
         isActive = true;
     }
 
+    /// <summary>
+    /// Method that Resets the cube to its original State
+    /// </summary>
     public void ResetCube() {
-        for (int i = 0; i < cubeMaterials.Count; i++) {
-            cubeMaterials[i] = cubeMaterialsOriginal[i];
-            cubeColorChanged[i] = false;
+
+        for (int i = 0; i < originalCubeColors.Count; i++) {
+            originalCubeFaces[i].GetComponent<Renderer>().material.SetColor("_Color", originalCubeColors[i]);
         }
+        indexPainted = 0;
     }
 
     private void Update() {
         if (isActive) {
             xRotation();
+            yRotation();
             zRotation();
         }
     }
@@ -49,42 +54,43 @@ public class CubeRotation : MonoBehaviour {
 
         Vector3 rotation = Vector3.up * rotationSpeed * Time.deltaTime;
 
-        transform.localEulerAngles += rotation;
+        transform.eulerAngles += rotation;
 
     }
 
+    private void yRotation() {
+
+        Vector3 rotation = Vector3.right * rotationSpeed * Time.deltaTime;
+
+        transform.eulerAngles += rotation;
+
+    }
     private void zRotation() {
 
         Vector3 rotation = Vector3.forward * rotationSpeed * Time.deltaTime;
 
-        transform.localEulerAngles += rotation;
+        transform.eulerAngles += rotation;
 
     }
 
-    public void RandomPaint(Color color) {
-        bool isPaiting = true;
+    /// <summary>
+    /// Method that Paints the rube
+    /// </summary>
+    /// <param name="color">Color to be painted in one of the cube face</param>
+    /// <returns>True - Cube can/has been painted, False - Cube can't be painted</returns>
+    public bool RandomPaint(Color color) {
 
-        while(isPaiting) {
-            int value = Random.Range(0, cubeMaterials.Count);
-
-            if(!cubeColorChanged[value]) {
-                cubeMaterials[value].color = color;
-                cubeColorChanged[value] = true;
-                isPaiting = false;
-                return;
-            }
-
+        if (indexPainted < originalCubeFaces.Count) {
+            originalCubeFaces[indexPainted].GetComponent<Renderer>().material.SetColor("_Color", color);
+            indexPainted++;
+            return true;
+        } else {
+            return false;
         }
     }
 
-    public bool IsCubePainted() {
-
-        foreach(bool v in cubeColorChanged) {
-            if(v == false) {
-                return false;
-            }
-        }
-        return true;
+    public int GetFacesPainted() {
+        return indexPainted;
     }
 
     public void EnableCube() {

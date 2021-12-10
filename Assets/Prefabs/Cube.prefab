@@ -202,6 +202,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7053726327767516893}
   - component: {fileID: 1341710667}
+  - component: {fileID: -9138728478288242612}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -218,7 +219,7 @@ Transform:
   m_GameObject: {fileID: 4497542099376488296}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_Children:
   - {fileID: 6761616008574722342}
   - {fileID: 3677395802213801354}
@@ -242,16 +243,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 100
-  cubeMaterials:
-  - {fileID: 2100000, guid: 5950b93bc3aeee843a2b2f3a3b06f477, type: 2}
-  - {fileID: 2100000, guid: 77a875ad7d46e48409f78eeb0f843a54, type: 2}
-  - {fileID: 2100000, guid: 20549c2d834502549b801e93638697c9, type: 2}
-  - {fileID: 2100000, guid: 18207674db6e34947a1bf78ea2ef7c93, type: 2}
-  - {fileID: 2100000, guid: b2c478953ca0e954da8bdf98da8ede78, type: 2}
-  - {fileID: 2100000, guid: 20e18505d8b401647bbf237ecacdb851, type: 2}
-  cubeMaterialsOriginal: []
-  cubeColorChanged: 
-  isCubePainted: 0
+  originalCubeFaces:
+  - {fileID: 6932493478106431751}
+  - {fileID: 8643862480641396577}
+  - {fileID: 3227566086741718691}
+  - {fileID: 1717536241484126278}
+  - {fileID: 6443102015752891548}
+  - {fileID: 6931093432500697784}
+  originalCubeColors: []
+  isActive: 0
+  indexPainted: 0
+--- !u!320 &-9138728478288242612
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4497542099376488296}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 0}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings: []
+  m_ExposedReferences:
+    m_References: []
 --- !u!1 &6443102015752891548
 GameObject:
   m_ObjectHideFlags: 0

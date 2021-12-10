@@ -26,6 +26,8 @@ public class UIController : MonoBehaviour {
     [SerializeField] Text pixelsLenghtText;
     [SerializeField] Text framesText;
     [SerializeField] Text rgbDataText;
+    [SerializeField] Text imgData;
+    [SerializeField] Text CubeData;
     [SerializeField] Text debugText;
     [SerializeField] bool isFading = false;
 
@@ -75,12 +77,24 @@ public class UIController : MonoBehaviour {
             timerPanel.alpha = 0;
         }
         if (exitPanel != null) {
-            exitPanel.alpha = 0;
+            ShowExitPanel(false);
         }
 
         debugText.text = "No Log";
 
         imageGO.SetActive(false);
+    }
+
+    private void ShowExitPanel(bool value) {
+        if(!value) {
+            exitPanel.alpha = 0;
+            exitPanel.interactable = false;
+            exitPanel.blocksRaycasts = false;
+        } else {
+            exitPanel.alpha = 1;
+            exitPanel.interactable = true;
+            exitPanel.blocksRaycasts = true;
+        }
     }
 
     private void SetDebugLog(string text) {
@@ -133,6 +147,18 @@ public class UIController : MonoBehaviour {
     public static void SetCounterText(string text) {
         if (ins != null) {
             ins.counterText.text = text;
+        }
+    }
+
+    public static void SetImgData(string text) {
+        if(ins != null) {
+            ins.imgData.text = text;
+        }
+    }
+
+    public static void SetCubeFaces(string text) {
+        if(ins != null) {
+            ins.CubeData.text = text;
         }
     }
 
@@ -220,13 +246,13 @@ public class UIController : MonoBehaviour {
 
     public static void ShowExitPanel() {
         if(ins != null) {
-            ins.exitPanel.alpha = 1;
+            ins.ShowExitPanel(true);
         }
     }
 
     public static void HideExitPanel() {
         if(ins != null) {
-            ins.exitPanel.alpha = 0;
+            ins.ShowExitPanel(false);
         }
     }
 
@@ -249,6 +275,7 @@ public class UIController : MonoBehaviour {
     }
 
     public void ResumeApplication() {
+        ShowExitPanel(false);
         GameController.SetPause(false);
     }
 

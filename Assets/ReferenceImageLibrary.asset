@@ -16,12 +16,12 @@ MonoBehaviour:
   m_GuidHigh: 14834248191638321340
   m_Images:
   - m_SerializedGuid:
-      m_GuidLow: 4781455652131531777
-      m_GuidHigh: 16094502561842342590
+      m_GuidLow: 5207711521338064291
+      m_GuidHigh: 11678124328842914742
     m_SerializedTextureGuid:
-      m_GuidLow: 15822313048238133500
-      m_GuidHigh: 13885371118782196330
-    m_Size: {x: 0.1, y: 0.06666667}
+      m_GuidLow: 14417203087259824534
+      m_GuidHigh: 13762718916878107416
+    m_Size: {x: 0.21, y: 0.32474226}
     m_SpecifySize: 1
-    m_Name: salesforce
+    m_Name: Card
     m_Texture: {fileID: 0}

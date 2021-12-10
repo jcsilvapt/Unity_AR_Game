@@ -8,23 +8,62 @@ using UnityEngine.XR.ARFoundation;
 public class ImageRecognition : MonoBehaviour {
 
     [SerializeField]
-    ARTrackedImageManager m_TrackedImageManager;
+    private GameObject[] placeablePrefabs;
 
-    void OnEnable() => m_TrackedImageManager.trackedImagesChanged += OnChanged;
+    private Dictionary<string, GameObject> spawnedPrefabs = new Dictionary<string, GameObject>();
+    private ARTrackedImageManager trackedImageManager;
 
-    void OnDisable() => m_TrackedImageManager.trackedImagesChanged -= OnChanged;
+    private void Awake() {
+        trackedImageManager = FindObjectOfType<ARTrackedImageManager>();
 
-    void OnChanged(ARTrackedImagesChangedEventArgs eventArgs) {
-        foreach (var newImage in eventArgs.added) {
-            // Handle Added event
-        }
-
-        foreach (var updatedImage in eventArgs.updated) {
-            // Handle updated event
-        }
-
-        foreach (var removedImage in eventArgs.removed) {
-            // Handle removed event
+        foreach(GameObject prefab in placeablePrefabs) {
+            GameObject newPrefab = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+            newPrefab.name = prefab.name;
+            spawnedPrefabs.Add(prefab.name, newPrefab);
         }
     }
+
+    private void OnEnable() {
+        trackedImageManager.trackedImagesChanged += ImageChanged;
+    }
+
+    private void OnDisable() {
+        trackedImageManager.trackedImagesChanged -= ImageChanged;
+    }
+
+    private void ImageChanged(ARTrackedImagesChangedEventArgs eventArgs) {
+
+        foreach(ARTrackedImage trackedImage in eventArgs.added) {
+            UpdateImage(trackedImage);
+        }
+
+
+        foreach (ARTrackedImage trackedImage in eventArgs.updated) {
+            UpdateImage(trackedImage);
+        }
+
+
+        foreach (ARTrackedImage trackedImage in eventArgs.removed) {
+            spawnedPrefabs[trackedImage.name].SetActive(false);
+        }
+    }
+
+    private void UpdateImage(ARTrackedImage trackedImage) {
+
+        string name = trackedImage.referenceImage.name;
+
+        Vector3 position = trackedImage.transform.position;
+
+        GameObject prefab = spawnedPrefabs[name];
+        prefab.transform.position = position;
+        prefab.SetActive(true);
+
+        foreach(GameObject go in spawnedPrefabs.Values) {
+            if(go.name != name) {
+                go.SetActive(false);
+            }
+        }
+
+    }
+
 }

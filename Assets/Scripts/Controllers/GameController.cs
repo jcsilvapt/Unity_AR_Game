@@ -31,15 +31,24 @@ public class GameController : MonoBehaviour {
     [Header("Developer Settings")]
     [SerializeField] bool isRunning = false;
     [SerializeField] bool readCamera = false;
+    [SerializeField] float timeToReadCamera = 1f;
+    [SerializeField] float elapsedTimeToReadCamera = 0f;
+    [SerializeField] float distanceBImage = 500f;
 
 
     private void Awake() {
         if (ins == null) {
             ins = this;
             DontDestroyOnLoad(this);
+
+            SetAndroidSettings();
         } else {
             Destroy(gameObject);
         }
+    }
+
+    private void SetAndroidSettings() {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
 
     private void Update() {
@@ -57,8 +66,8 @@ public class GameController : MonoBehaviour {
             } else {
                 if (elapsedMaxGameTimer <= 0) {
                     GameEnded(false);
-                    UIController.SetTimerText(elapsedMaxGameTimer.ToString("F2"));
                 } else {
+                    UIController.SetTimerText(elapsedMaxGameTimer.ToString("F2"));
                     elapsedMaxGameTimer -= Time.deltaTime;
                 }
                 if (colorTimer) {
@@ -71,7 +80,12 @@ public class GameController : MonoBehaviour {
                     }
                 }
                 if(readCamera) {
-                    GetCameraImage();
+                    if (elapsedTimeToReadCamera >= timeToReadCamera) {
+                        GetCameraImage();
+                        elapsedTimeToReadCamera = 0f;
+                    } else {
+                        elapsedTimeToReadCamera += Time.deltaTime;
+                    }
                 }
 
             }
@@ -84,6 +98,7 @@ public class GameController : MonoBehaviour {
 
     private void GameEnded(bool win) {
         if(win) {
+            UIController.ShowBodyPanel();
             UIController.SetCounterText("Ganhas-te!");
             StartCoroutine(RestartGame());
 
@@ -91,24 +106,23 @@ public class GameController : MonoBehaviour {
     }
 
     private void GetCameraImage() {
+        distanceBImage = camC.GetDistance(generatedColor);
+        UIController.SetDebugText("D: " + distanceBImage.ToString());
 
-        float distance = camC.GetDistance(generatedColor);
-        UIController.SetDebugText("D: " + distance.ToString());
-
-        if (distance < 0.4f) {
+        if (distanceBImage < 0.8f) {
             StartCoroutine(DisplayMatch());
         }
 
     }
 
     private void SetInitialStatus() {
-        UIController.SetSubtitleText("Clica no ecr� para come�ar!");
+        UIController.ShowTimerPanel();
+        UIController.SetSubtitleText("Clica no ecrã para começar!");
         UIController.SetCounterText("");
         hasTouchToStart = false;
         startRound = false;
         elapsedMaxGameTimer = maxGameTime;
         elapsedMaxColorTimer = maxColorTime;
-        cube.ResetCube();
         camC.SetStatus(true);
     }
 
@@ -121,28 +135,29 @@ public class GameController : MonoBehaviour {
         Color randomColor = new Color();
         switch (randomIndex) {
             case 0:
-                randomColor = new Color(Random.Range(0, 255), 0, 0);
+                randomColor = new Color(Random.Range(0f, 1f), 0f, 0f);
                 break;
             case 1:
-                randomColor = new Color(0, Random.Range(0, 255), 0);
+                randomColor = new Color(0, Random.Range(0f, 1f), 0f);
                 break;
             case 2:
-                randomColor = new Color(0, 0, Random.Range(0, 255));
+                randomColor = new Color(0f, 0f, Random.Range(0f, 1f));
                 break;
             case 3:
-                randomColor = new Color(Random.Range(0, 255), Random.Range(0, 255), Random.Range(0, 255));
+                randomColor = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
                 break;
         }
 
 
         UIController.SetImageColor(randomColor);
-
+        UIController.SetImgData(randomColor.ToString());
         generatedColor = randomColor;
     }
 
     private void GamePhase(Phase phase) {
         if (phase == Phase.GAME) {
             isRunning = true;
+            cube = FindObjectOfType<CubeRotation>();
             SetInitialStatus();
         } else {
             isRunning = false;
@@ -151,8 +166,7 @@ public class GameController : MonoBehaviour {
     }
 
     private void PauseGame(bool value) {
-        isRunning = !value;
-        Time.timeScale = isRunning ? 1 : 0;
+        Time.timeScale = value ? 0 : 1;
     }
 
     #region SINGLETON
@@ -201,18 +215,22 @@ public class GameController : MonoBehaviour {
 
     private IEnumerator StartInitialCounter() {
         UIController.ShowBodyPanel();
-
         UIController.SetSubtitleText("Prepara-te!");
-
+        cube.ResetCube();
         for (int i = 3; i > 0; i--) {
             UIController.SetCounterText(i.ToString());
             yield return new WaitForSeconds(1f);
         }
+
         UIController.SetSubtitleText("VAI!");
+
         yield return new WaitForSeconds(1f);
+
         UIController.HideBodyPanel();
-        UIController.ShowImage();
         GenerateColor();
+        UIController.ShowImage();
+
+
         startRound = true;
         readCamera = true;
     }
@@ -220,12 +238,14 @@ public class GameController : MonoBehaviour {
     private IEnumerator DisplayMatch() {
         readCamera = false;
         colorTimer = false;
-        UIController.SetCounterText("MATCH");
+        UIController.SetCounterText("CERTO!");
         UIController.ShowBodyPanel();
         yield return new WaitForSeconds(2f);
         UIController.HideBodyPanel();
-        if (!cube.IsCubePainted()) {
-            cube.RandomPaint(generatedColor);
+        UIController.SetDebugText(cube.ToString());
+        distanceBImage = 500f;
+        if (cube.RandomPaint(generatedColor)) {
+            UIController.SetCubeFaces(cube.GetFacesPainted().ToString());
             GenerateColor();
             elapsedMaxColorTimer = maxColorTime;
             colorTimer = true;

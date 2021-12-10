@@ -10,6 +10,9 @@ public class CameraController : MonoBehaviour {
     [SerializeField] ARCameraManager m_CameraManager;
     [SerializeField] AROcclusionManager m_OcclusionManager;
 
+    [Header("Settings")]
+    [SerializeField] CalculationMethod calculationMethod = CalculationMethod.HAMMINGDISTANCE;
+
     [Header("Developer")]
     [SerializeField] RawImage m_RawCameraImage;
     [SerializeField] Texture2D m_CameraTexture;
@@ -70,13 +73,12 @@ public class CameraController : MonoBehaviour {
             UIController.SetDebugRGBText(cameraColor.ToString());
 
             // Check the distance using Hamming Distance (Better performance)
-            return ImageProcessing.GetDistance(ConvertColor(generatedColor), cameraColor, CalculationMethod.VECTORDISTANCE);
+            return ImageProcessing.GetDistance(/*ConvertColor(generatedColor)*/generatedColor, cameraColor, calculationMethod);
         }
         return 0f;
     }
 
     private Color ConvertColor(Color color) {
-
         return new Color(color.r / 255, color.g / 255, color.b / 255, color.a / 255);
     }
 
