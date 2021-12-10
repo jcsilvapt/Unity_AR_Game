@@ -84,4 +84,8 @@ public class CameraController : MonoBehaviour {
         isRunning = value;
     }
 
+    public bool GetStatus() {
+        return isRunning;
+    }
+
 }

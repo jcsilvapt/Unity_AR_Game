@@ -31,7 +31,7 @@ public class CubeRotation : MonoBehaviour {
         isActive = true;
     }
 
-    private void ResetCube() {
+    public void ResetCube() {
         for (int i = 0; i < cubeMaterials.Count; i++) {
             cubeMaterials[i] = cubeMaterialsOriginal[i];
             cubeColorChanged[i] = false;

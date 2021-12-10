@@ -11,6 +11,7 @@ public class UIController : MonoBehaviour {
     [SerializeField] CanvasGroup subtitlePanel;
     [SerializeField] CanvasGroup timerPanel;
     [SerializeField] CanvasGroup bodyPanel;
+    [SerializeField] CanvasGroup exitPanel;
     [SerializeField] Text subtitlesText;
     [SerializeField] Text timerText;
     [SerializeField] Text counterText;
@@ -72,6 +73,9 @@ public class UIController : MonoBehaviour {
         }
         if (timerPanel != null) {
             timerPanel.alpha = 0;
+        }
+        if (exitPanel != null) {
+            exitPanel.alpha = 0;
         }
 
         debugText.text = "No Log";
@@ -214,7 +218,21 @@ public class UIController : MonoBehaviour {
         }
     }
 
+    public static void ShowExitPanel() {
+        if(ins != null) {
+            ins.exitPanel.alpha = 1;
+        }
+    }
+
+    public static void HideExitPanel() {
+        if(ins != null) {
+            ins.exitPanel.alpha = 0;
+        }
+    }
+
     #endregion
+
+#region UI BUTTONS
 
     public void ToggleDebug() {
         if (!showDebug) {
@@ -225,5 +243,15 @@ public class UIController : MonoBehaviour {
             debugPanel.SetActive(false);
         }
     }
+
+    public void QuitApplication() {
+        Application.Quit();
+    }
+
+    public void ResumeApplication() {
+        GameController.SetPause(false);
+    }
+
+#endregion
 
 }

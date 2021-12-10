@@ -30,6 +30,7 @@ public class GameController : MonoBehaviour {
 
     [Header("Developer Settings")]
     [SerializeField] bool isRunning = false;
+    [SerializeField] bool readCamera = false;
 
 
     private void Awake() {
@@ -55,7 +56,7 @@ public class GameController : MonoBehaviour {
                 }
             } else {
                 if (elapsedMaxGameTimer <= 0) {
-                    SetInitialStatus();
+                    GameEnded(false);
                     UIController.SetTimerText(elapsedMaxGameTimer.ToString("F2"));
                 } else {
                     elapsedMaxGameTimer -= Time.deltaTime;
@@ -65,45 +66,50 @@ public class GameController : MonoBehaviour {
                         GenerateColor();
                         elapsedMaxColorTimer = maxColorTime;
                     } else {
-                        UIController.SetSubtitleText("Tens " + elapsedMaxColorTimer.ToString("F2") + " para encontrares a cor: ");
+                        UIController.SetSubtitleText("Tens " + elapsedMaxColorTimer.ToString("F2") + " s, para encontrares a cor: ");
                         elapsedMaxColorTimer -= Time.deltaTime;
                     }
                 }
-
-                GetCameraImage();
-
-                /*
-                if (!isActive) {
-                    RegisterCameraTexture();
+                if(readCamera) {
+                    GetCameraImage();
                 }
 
-                GetCameraImage();
-                */
             }
+        }
+        if(Input.GetKey(KeyCode.Escape)) {
+            UIController.ShowExitPanel();
+            PauseGame(true);
+        }
+    }
+
+    private void GameEnded(bool win) {
+        if(win) {
+            UIController.SetCounterText("Ganhas-te!");
+            StartCoroutine(RestartGame());
+
         }
     }
 
     private void GetCameraImage() {
 
-        camC.SetStatus(true);
-
         float distance = camC.GetDistance(generatedColor);
         UIController.SetDebugText("D: " + distance.ToString());
 
-        if (distance < 0.2f) {
+        if (distance < 0.4f) {
             StartCoroutine(DisplayMatch());
         }
 
     }
 
     private void SetInitialStatus() {
-        UIController.SetSubtitleText("Clica no ecrã para começar!");
-        //colorObject.SetActive(false);
-        UIController.SetCounterText("3");
+        UIController.SetSubtitleText("Clica no ecrï¿½ para comeï¿½ar!");
+        UIController.SetCounterText("");
         hasTouchToStart = false;
         startRound = false;
         elapsedMaxGameTimer = maxGameTime;
         elapsedMaxColorTimer = maxColorTime;
+        cube.ResetCube();
+        camC.SetStatus(true);
     }
 
     public void GenerateColor() {
@@ -144,6 +150,11 @@ public class GameController : MonoBehaviour {
         currentPhase = phase;
     }
 
+    private void PauseGame(bool value) {
+        isRunning = !value;
+        Time.timeScale = isRunning ? 1 : 0;
+    }
+
     #region SINGLETON
 
     public static Phase GetGamePhase() {
@@ -178,6 +189,12 @@ public class GameController : MonoBehaviour {
         }
     }
 
+    public static void SetPause(bool value) {
+        if(ins != null) {
+            ins.PauseGame(value);
+        }
+    }
+
     #endregion
 
     #region COROUTINES
@@ -197,9 +214,11 @@ public class GameController : MonoBehaviour {
         UIController.ShowImage();
         GenerateColor();
         startRound = true;
+        readCamera = true;
     }
 
     private IEnumerator DisplayMatch() {
+        readCamera = false;
         colorTimer = false;
         UIController.SetCounterText("MATCH");
         UIController.ShowBodyPanel();
@@ -210,10 +229,19 @@ public class GameController : MonoBehaviour {
             GenerateColor();
             elapsedMaxColorTimer = maxColorTime;
             colorTimer = true;
+            readCamera = true;
+        } else {
+            camC.SetStatus(false);
+            GameEnded(true);
         }
-
     }
 
+    private IEnumerator RestartGame() {
+        yield return new WaitForSeconds(3f);
+
+        SetInitialStatus();
+    }
+ 
     #endregion
 
 }

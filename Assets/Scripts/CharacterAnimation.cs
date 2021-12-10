@@ -16,7 +16,7 @@ public class CharacterAnimation : MonoBehaviour {
     [SerializeField] string lastClipName = "";
     [SerializeField] bool isFadingOccurring = false;
     [SerializeField] bool runLogic = false;
-    [SerializeField] float timePerText = 5f;
+    [SerializeField] float timePerText = 3f;
     [SerializeField] float elapsedTime = 0f;
     [SerializeField] bool finishWaving = false;
 
@@ -100,11 +100,11 @@ public class CharacterAnimation : MonoBehaviour {
     private IEnumerator StartGame() {
         UIController.SetSubtitleText("ISSO ENCONTRAS-TE");
         yield return new WaitForSeconds(4f);
-        UIController.SetSubtitleText("Vamos começar a jogar, encontra a cor que te vou mostrar...");
+        UIController.SetSubtitleText("Vamos comeï¿½ar a jogar, encontra a cor que te vou mostrar...");
         yield return new WaitForSeconds(4f);
-        UIController.SetSubtitleText("E depois aproxima-te da carta e vais pintar o cubo com essa cor...");
+        UIController.SetSubtitleText("Quando a encontrares o cubo vai ser pintado com essa cor!");
         yield return new WaitForSeconds(4f);
-        UIController.SetSubtitleText("Tenta encontrar o máximo de cores antes do tempo acabar!!");
+        UIController.SetSubtitleText("Tenta encontrar o mï¿½ximo de cores antes do tempo acabar!!");
         yield return new WaitForSeconds(4f);
         UIController.SetSubtitleText("Boa Sorte!!!");
         yield return new WaitForSeconds(4f);
