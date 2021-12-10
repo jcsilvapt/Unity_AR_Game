@@ -1,28 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR;
 using UnityEngine.XR.ARFoundation;
 
 public class ImageRecognition : MonoBehaviour {
 
-    private ARTrackedImageManager aRTrackedImageManager;
+    [SerializeField]
+    ARTrackedImageManager m_TrackedImageManager;
 
-    private void Awake() {
-        aRTrackedImageManager = FindObjectOfType<ARTrackedImageManager>();
-    }
+    void OnEnable() => m_TrackedImageManager.trackedImagesChanged += OnChanged;
 
-    private void OnEnable() {
-        aRTrackedImageManager.trackedImagesChanged += OnImageChange;
-    }
+    void OnDisable() => m_TrackedImageManager.trackedImagesChanged -= OnChanged;
 
-    private void OnDisable() {
-        aRTrackedImageManager.trackedImagesChanged -= OnImageChange;
-    }
+    void OnChanged(ARTrackedImagesChangedEventArgs eventArgs) {
+        foreach (var newImage in eventArgs.added) {
+            // Handle Added event
+        }
 
-    public void OnImageChange(ARTrackedImagesChangedEventArgs args) {
-        foreach(var trackedImage in args.added) {
-            Debug.Log(trackedImage.name);
+        foreach (var updatedImage in eventArgs.updated) {
+            // Handle updated event
+        }
+
+        foreach (var removedImage in eventArgs.removed) {
+            // Handle removed event
         }
     }
 }

@@ -24,7 +24,7 @@ public class ImageProcessing {
         // Set the R,G,B to the average value of the color
         r = r / data.Length;
         g = g / data.Length;
-        b = g / data.Length;
+        b = b / data.Length;
 
         // Create new instance of the color to be returned
         Color averageColor = new Color(r, g, b);
@@ -33,43 +33,29 @@ public class ImageProcessing {
 
     }
 
-    public static bool CompareColors(Color a, Color b, CalculationMethod method) {
+    public static float GetDistance(Color a, Color b, CalculationMethod method) {
+
+        float distance = 0;
 
         // Calculate accordingly the methods choosen
-
         switch(method) {
             case CalculationMethod.VECTORDISTANCE:
                 // Create two vectors3 to calculate the distance between them
-                Vector3 a = new Vector3(a.r, a.g, a.b);
-                Vector3 b = new Vector3(b.r, b.g, b.b);
+                Vector3 colorA = new Vector3(a.r, a.g, a.b);
+                Vector3 colorB = new Vector3(b.r, b.g, b.b);
 
                 // Calculate the distance between them
-                float distance = Vector3.Distance(a, b);
-                if(distance <= 0.4f) {
-                    return true;
-                }
-                break;
+                return distance = Vector3.Distance(colorA, colorB);
+
             case CalculationMethod.MANHATTANDISTANCE:
                 // Calculate the distance using Manhattan Distance Algorithm
-                float distance = Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y) + Mathf.Abs(a.z - b.z);
-
-                if(distance <= 1f) {
-                    return true;
-                }
-                break;
+                return distance = Mathf.Abs(a.r - b.r) + Mathf.Abs(a.g - b.g) + Mathf.Abs(a.b - b.b);
             case CalculationMethod.HAMMINGDISTANCE:
                 // Calculate the distance using the Hamming Distance (probably the best Algorithm)
-                float distance = (Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y) + Mathf.Abs(a.z - b.z)) / 3;
-
-                if(distance <= 0.4f) {
-                    return true;
-                }
-                break;
+                return distance = (Mathf.Abs(a.r - b.r) + Mathf.Abs(a.g - b.g) + Mathf.Abs(a.b - b.b)) / 3;
             default:
-                return false;
-                break;
+                return 0f;
         }
-        return false;
     }
 
 }
