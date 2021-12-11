@@ -316,12 +316,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
-  subtitles:
+  initialSubtitles:
   - "Ol\xE1!!!"
   - Preciso da tua ajuda.
   - Preciso que me ajudes a encontrar a minha carta!
   - E depois preciso que a pintes com as cores do teu mundo!
   - Encontra a minha carta!
+  finalSubtitles:
+  - "WOW \xC9 ISSO!"
+  - "Vamos come\xE7ar a jogar!"
+  - Encontra a cor que te vou mostrar...
+  - Quando a encontrares, o cubo vai ser pintado com essa cor!
+  - "Tenta encontrar o m\xE1ximo de cores antes do tempo acabar!!"
+  - Boa Sorte!!!
   isAnimationPlaying: 1
   textToShowIndex: 0
   lastClipName: 
