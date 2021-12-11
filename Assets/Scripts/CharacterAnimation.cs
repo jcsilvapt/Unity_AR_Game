@@ -8,7 +8,8 @@ public class CharacterAnimation : MonoBehaviour {
     [SerializeField] Animator anim;
 
     [Header("Subtitles")]
-    [SerializeField] List<string> subtitles = new List<string>();
+    [SerializeField] List<string> initialSubtitles = new List<string>();
+    [SerializeField] List<string> finalSubtitles = new List<string>();
 
     [Header("Developer Settings")]
     [SerializeField] bool isAnimationPlaying = true;
@@ -29,7 +30,7 @@ public class CharacterAnimation : MonoBehaviour {
             anim.SetBool("Greetings", false);
             anim.SetBool("isIntro", false);
         } else {
-            UIController.SetSubtitleText(subtitles[textToShowIndex]);
+            UIController.SetSubtitleText(initialSubtitles[textToShowIndex]);
         }
 
     }
@@ -54,7 +55,7 @@ public class CharacterAnimation : MonoBehaviour {
         }
 
         if (runLogic) {
-            if (textToShowIndex < subtitles.Count) {
+            if (textToShowIndex < initialSubtitles.Count) {
                 if (elapsedTime >= timePerText) {
                     if (!finishWaving) {
                         finishWaving = true;
@@ -75,11 +76,11 @@ public class CharacterAnimation : MonoBehaviour {
 
     private void ChangeText() {
         textToShowIndex++;
-        if (textToShowIndex == subtitles.Count) {
+        if (textToShowIndex == initialSubtitles.Count) {
             StartCoroutine(ResizeCharacter());
         }
         Debug.Log("subtitle Changed");
-        UIController.SetSubtitleText(subtitles[textToShowIndex - 1]);
+        UIController.SetSubtitleText(initialSubtitles[textToShowIndex - 1]);
 
     }
 
@@ -100,18 +101,11 @@ public class CharacterAnimation : MonoBehaviour {
     #region COROUTINES
 
     private IEnumerator StartGame() {
-        UIController.SetSubtitleText("ISSO ENCONTRAS-TE");
-        yield return new WaitForSeconds(4f);
-        UIController.SetSubtitleText("Vamos começar a jogar!");
-        yield return new WaitForSeconds(4f);
-        UIController.SetSubtitleText("Encontra a cor que te vou mostrar...");
-        yield return new WaitForSeconds(4f);
-        UIController.SetSubtitleText("Quando a encontrares, o cubo vai ser pintado com essa cor!");
-        yield return new WaitForSeconds(4f);
-        UIController.SetSubtitleText("Tenta encontrar o máximo de cores antes do tempo acabar!!");
-        yield return new WaitForSeconds(4f);
-        UIController.SetSubtitleText("Boa Sorte!!!");
-        yield return new WaitForSeconds(4f);
+
+        foreach(string text in finalSubtitles) {
+            UIController.SetSubtitleText(text);
+            yield return new WaitForSeconds(4f);
+        }
         GameController.SetGamePhase(Phase.GAME);
     }
 
