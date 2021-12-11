@@ -97,19 +97,20 @@ public class GameController : MonoBehaviour {
     }
 
     private void GameEnded(bool win) {
-        if(win) {
-            UIController.ShowBodyPanel();
+        UIController.ShowBodyPanel();
+        if (win) {
             UIController.SetCounterText("Ganhas-te!");
-            StartCoroutine(RestartGame());
-
+        } else {
+            UIController.SetCounterText("Oh :(... Tenta outra vez!");
         }
+        StartCoroutine(RestartGame());
     }
 
     private void GetCameraImage() {
         distanceBImage = camC.GetDistance(generatedColor);
         UIController.SetDebugText("D: " + distanceBImage.ToString());
 
-        if (distanceBImage < 0.8f) {
+        if (distanceBImage < 0.75f) {
             StartCoroutine(DisplayMatch());
         }
 

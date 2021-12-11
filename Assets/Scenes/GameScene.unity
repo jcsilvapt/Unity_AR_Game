@@ -193,7 +193,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Resume
+  m_Text: Continuar
 --- !u!222 &22859512
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -320,7 +320,6 @@ MonoBehaviour:
   - "Ol\xE1!!!"
   - Preciso da tua ajuda.
   - Preciso que me ajudes a encontrar a minha carta!
-  - E depois preciso que a pintes com as cores do teu mundo!
   - Encontra a minha carta!
   finalSubtitles:
   - "WOW \xC9 ISSO!"
@@ -2109,7 +2108,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Toggle Debug
+  m_Text: Debug Mode
 --- !u!222 &1129148200
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2543,7 +2542,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Quit :(
+  m_Text: Sair :(
 --- !u!222 &1369520019
 CanvasRenderer:
   m_ObjectHideFlags: 0
